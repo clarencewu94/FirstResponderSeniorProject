@@ -19,4 +19,9 @@
     <string name="reg_login_text">Already have an account?</string>
     <string name="Reg_pass_confirm">Confirm Password</string>
     <string name="scan_btn_text">Scan</string>
+    <string name="enable_ble_text" translatable="false">Enable/Disable Bluetooth</string>
+    <string name="UserName_text" >Name</string>
+    <string name="HeartRate_text">HeartRate</string>
+    <string name="Oxygen_text">Oxygen</string>
+    <string name="discoverable_text">Enable Discover setting</string>
 </resources>

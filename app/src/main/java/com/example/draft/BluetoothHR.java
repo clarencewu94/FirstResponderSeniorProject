@@ -30,58 +30,27 @@ public class BluetoothHR extends AppCompatActivity { //service runs in backgroun
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
-    private int mConnectionState = STATE_DISCONNECTED;
 
     private FirebaseAuth mAuth;
 
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
 
-    public final static String ACTION_GATT_CONNECTED =
-            "com.example.bluetooth.ACTION_GATT_CONNECTED";
-    public final static String ACTION_GATT_DISCONNECTED =
-            "com.example.bluetooth.ACTION_GATT_DISCONNECTED";
-    public final static String ACTION_GATT_SERVICES_DISCOVERED =
-            "com.example.bluetooth.ACTION_GATT_SERVICES_DISCOVERED";
-    public final static String ACTION_DATA_AVAILABLE =
-            "com.example.bluetooth.ACTION_DATA_AVAILABLE";
-    public final static String EXTRA_DATA =
-            "com.example.bluetooth.EXTRA_DATA";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
+
+    }
+
+    //How this works, scan button used to detect ble devices
+    //once discovered, provides a list, select a tool and proceed to normal hr stuff
+    /*
+    1. Requires enable Bluetooth
+    2. Make Bluetooth discoverable
+    3. Display Paired/bound devices*/
     //enable bluetooth-----------
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        if(mBluetoothAdapter == null){
-//            Log.d(Tag, "enabledDisableBT: Does not have Bluetooth capabilities");
-//        }
-//        if(!mBluetoothAdapter.isEnabled()){
-//            Log.d(Tag, "enabledDisableBT: Enabling BT");
-//
-//            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivity(enableBTIntent);
-//
-//            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-//            registerReceiver(mBroadcastReceiver1, BTIntent);
-//        }
-//        if(mBluetoothAdapter.isEnabled()){
-//            Log.d(Tag, "enabledDisableBT: Disabling BT");
-//            mBluetoothAdapter.disable();
-//            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-//            registerReceiver(mBroadcastReceiver1, BTIntent);
-//        }
-//        return super.onStartCommand(intent, flags, startId);
-//
-//    }
-    //Discover Devices------------------
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//
-//
-//        // Register for broadcasts when a device is discovered.
-//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//        registerReceiver(receiver, filter);
-//    }
+
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -104,17 +73,11 @@ public class BluetoothHR extends AppCompatActivity { //service runs in backgroun
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(receiver);
     }
+
+    //Discover devices https://www.youtube.com/watch?v=hv_-tX1VwXE&list=PLgCYzUzKIBE8KHMzpp6JITZ2JxTgWqDH2&index=3
+
     // Query paired devices-----------------------
-//    Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-//
-//    if (pairedDevices.size() > 0) {
-//            // There are paired devices. Get the name and address of each paired device.
-//            for (BluetoothDevice device : pairedDevices) {
-//                String deviceName = device.getName();
-//                String deviceHardwareAddress = device.getAddress(); // MAC address
-//            }
-//        }
-//
+
 
 
 }

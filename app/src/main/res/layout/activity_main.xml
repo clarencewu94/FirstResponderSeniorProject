@@ -18,114 +18,17 @@
 
  </androidx.appcompat.widget.Toolbar>
 
- <TableLayout
-     android:layout_width="411dp"
-     android:layout_height="252dp"
-     tools:layout_editor_absoluteX="0dp"
-     tools:layout_editor_absoluteY="56dp">
+ <ListView
+     android:id="@+id/lvNewDevices"
+     android:layout_width="413dp"
+     android:layout_height="672dp"
 
-  <TableRow
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.0"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/main_toolbar"
+     app:layout_constraintVertical_bias="0.0" />
 
-   <TextView
-       android:id="@+id/textView"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
 
-   <TextView
-       android:id="@+id/textView2"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-   <TextView
-       android:id="@+id/textView3"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-  </TableRow>
-  <TableRow
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-   <TextView
-       android:id="@+id/textView"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-   <TextView
-       android:id="@+id/textView2"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-   <TextView
-       android:id="@+id/textView3"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-  </TableRow>
-  <TableRow
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-   <TextView
-       android:id="@+id/textView"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-   <TextView
-       android:id="@+id/textView2"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-   <TextView
-       android:id="@+id/textView3"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-  </TableRow>
- </TableLayout>
-
- <LinearLayout
-     android:layout_width="409dp"
-     android:layout_height="421dp"
-     android:orientation="horizontal"
-     tools:layout_editor_absoluteX="1dp"
-     tools:layout_editor_absoluteY="309dp">
- <TextView
-     android:id="@+id/textView"
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
-     android:text="TextView" />
-
-  <LinearLayout
-      android:layout_width="409dp"
-      android:layout_height="match_parent"
-      android:orientation="vertical"
-      tools:layout_editor_absoluteX="1dp"
-      tools:layout_editor_absoluteY="309dp">
-
-   <TextView
-       android:id="@+id/textView"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-
-   <TextView
-       android:id="@+id/textView"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="TextView" />
-  </LinearLayout>
-
- </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

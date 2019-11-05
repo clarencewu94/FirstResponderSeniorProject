@@ -80,6 +80,18 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        reg_login_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                sendToLogin();
+            }
+            });
+    }
+
+    private void sendToLogin() {
+        Intent LoginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(LoginIntent);
+        finish();//makes sure user does not go back, finished intent
     }
 
     @Override
