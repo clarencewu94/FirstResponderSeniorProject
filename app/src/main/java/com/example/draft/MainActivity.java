@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -281,16 +282,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
     }
-    @Override
-    protected void onDestroy() {
-        Log.d(Tag, "onDestroy: called.");
-        super.onDestroy();
-        unregisterReceiver(mBroadcastReceiver1);
-        unregisterReceiver(mBroadcastReceiver2);
-        unregisterReceiver(mBroadcastReceiver3);
-        unregisterReceiver(mBroadcastReceiver4);
-        //mBluetoothAdapter.cancelDiscovery();
-    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
         //first cancel discovery because its very memory intensive.
@@ -308,6 +300,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2){
             Log.d(Tag, "Trying to pair with " + deviceName);
             mBTDevices.get(i).createBond();
+            Intent loginIntent = new Intent(MainActivity.this, MainActivity2.class);
+            startActivity(loginIntent);
+            finish();//makes sure user does not go back, finished intent
         }
     }
 

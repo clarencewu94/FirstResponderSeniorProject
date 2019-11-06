@@ -24,4 +24,14 @@
     <string name="HeartRate_text">HeartRate</string>
     <string name="Oxygen_text">Oxygen</string>
     <string name="discoverable_text">Enable Discover setting</string>
+    <string name="set_name_btn">Create Name</string>
+    <string name="Account_page_text">Account Page</string>
+    <string name="Name_btn">Create Name</string>
+    <string name="set_age_btn">Set Age</string>
+    <string name="age_btn">Set Age</string>
+    <string name="HRPeak_text">HR Peak</string>
+    <string name="HR_Lowest_txt">HR Lowest</string>
+    <string name="Oxygen_txt">Oxygen</string>
+    <string name="Confidencetxt">Confidence</string>
+    <string name="save_btn">Save</string>
 </resources>
