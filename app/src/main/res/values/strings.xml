@@ -11,13 +11,13 @@
     <string name="login_failed">"Login failed"</string>
     <string name="Email_hint">Your Email</string>
     <string name="Button_Press">Button</string>
-    <string name="Login_Button">Login</string>
+    <string name="Login_Button" translatable="false">Login</string>
     <string name="action_setting_text">AccountSettings</string>
     <string name="action_logout_text">Logout</string>
     <string name="register_press">Register</string>
     <string name="reg_btn_text">Create New Account</string>
     <string name="reg_login_text">Already have an account?</string>
-    <string name="Reg_pass_confirm">Confirm Password</string>
+    <string name="Reg_pass_confirm" translatable="false">Confirm Password</string>
     <string name="scan_btn_text">Scan</string>
     <string name="enable_ble_text" translatable="false">Enable/Disable Bluetooth</string>
     <string name="UserName_text" >Name</string>

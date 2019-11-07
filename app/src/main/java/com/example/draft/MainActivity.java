@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
            case R.id.action_logout_btn:
            logout();
            return true;
-           case R.id.Account_Page:
+           case R.id.action_settings_btn:
                AccountPage();
                return true;
            case R.id.enable_ble_btn:
@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     /*--------------------------------------------Definitions here----------------------------------------------------   */
 
     private void AccountPage() {
+        sendToAccountPage();
+    }
+    private void sendToAccountPage() {
         Intent AccountIntent = new Intent(MainActivity.this, AccountSettings.class);
         startActivity(AccountIntent);
         finish();//makes sure user does not go back, finished intent

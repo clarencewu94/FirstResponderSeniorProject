@@ -3,6 +3,8 @@ package com.example.draft;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,9 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class AccountSettings extends AppCompatActivity {
@@ -39,6 +44,7 @@ Graph
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    
 
     public String username;
     public String email;
@@ -74,10 +80,10 @@ Graph
        save_btn.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               int age = Integer.parseInt(set_age.getText().toString().trim());
+               int agea = Integer.parseInt(set_age.getText().toString().trim());
 
                userID.setName(set_name.getText().toString().trim());
-               userID.setAge(age);
+               userID.setAge(agea);
                mDatabase.child("UserInfo").setValue(userID);
                Toast.makeText(AccountSettings.this, "data inserted successfully", Toast.LENGTH_SHORT).show();
            }
@@ -111,6 +117,7 @@ Graph
 
 
     ArrayList<Users> Profile = new ArrayList<>();
+
 
 //    ListAdaptor adapter = new ListAdaptor(this, R.layout.adapter_view_layout, Profile);
 //        mListView.setAdapter(adapter);
