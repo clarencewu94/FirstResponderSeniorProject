@@ -23,6 +23,7 @@
         android:layout_width="132dp"
         android:layout_height="36dp"
         android:layout_marginTop="156dp"
+        android:onClick="AddInfo"
         android:text="@string/save_btn"
         app:layout_constraintBottom_toTopOf="@+id/graph"
         app:layout_constraintEnd_toEndOf="parent"
