@@ -104,7 +104,7 @@ Graph
         //For Main Toolbar
         mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
-        getSupportActionBar().setTitle("Main Page");
+        getSupportActionBar().setTitle("Account Page");
 
         //For FireStore
         db = FirebaseFirestore.getInstance();
