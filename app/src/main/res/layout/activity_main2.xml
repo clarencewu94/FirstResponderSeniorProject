@@ -18,15 +18,108 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="402dp"
+        android:layout_height="49dp"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_toolbar"
+        app:layout_constraintVertical_bias="0.204">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_device_address"
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/device_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="398dp"
+        android:layout_height="58dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_state"
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/connection_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/disconnected_text"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="394dp"
+        android:layout_height="61dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_data_text"
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/data_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/disconnected_text"
+            android:textSize="18sp" />
+    </LinearLayout>
+
     <ScrollView
-        android:layout_width="411dp"
-        android:layout_height="222dp"
+        android:id="@+id/scrollView2"
+        android:layout_width="416dp"
+        android:layout_height="125dp"
         android:layout_alignParentBottom="true"
         android:layout_weight="1"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_toolbar"
+        app:layout_constraintVertical_bias="0.638">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -47,7 +140,7 @@
 
                     <TextView
                         android:id="@+id/tvName"
-                        android:layout_width="140dp"
+                        android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:text="@string/UserName_text"
                         tools:text="@string/UserName_text" />
@@ -60,9 +153,15 @@
 
                     <TextView
                         android:id="@+id/tvOxygen"
-                        android:layout_width="132dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="74dp"
+                        android:layout_height="match_parent"
                         android:text="@string/Oxygen_text" />
+
+                    <TextView
+                        android:id="@+id/OnlineStatus"
+                        android:layout_width="78dp"
+                        android:layout_height="match_parent"
+                        android:text="@string/Online_text" />
 
                 </TableRow>
 
@@ -71,22 +170,31 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/tvUser2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:id="@+id/User1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="@string/User1_Text" />
 
                     <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:id="@+id/Heart1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/Ox1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/Online1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:id="@+id/GPS1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="@string/GPS_btn" />
 
                 </TableRow>
 
@@ -95,23 +203,31 @@
                     android:layout_height="105dp">
 
                     <TextView
-                        android:id="@+id/tvUser2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView" />
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView" />
-
-                    <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/User2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="TextView" />
+                        android:text="@string/User2_text" />
 
+                    <TextView
+                        android:id="@+id/Heart2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/Ox2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/Online2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:id="@+id/GPS2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/GPS2_btn" />
                 </TableRow>
             </TableLayout>
         </LinearLayout>

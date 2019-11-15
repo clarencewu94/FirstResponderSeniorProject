@@ -20,7 +20,7 @@
     <string name="Reg_pass_confirm" translatable="false">Confirm Password</string>
     <string name="scan_btn_text">Scan</string>
     <string name="enable_ble_text" translatable="false">Enable/Disable Bluetooth</string>
-    <string name="UserName_text" >Name</string>
+    <string name="UserName_text">Name</string>
     <string name="HeartRate_text">HeartRate</string>
     <string name="Oxygen_text">Oxygen</string>
     <string name="discoverable_text">Enable Discover setting</string>
@@ -34,4 +34,29 @@
     <string name="Oxygen_txt">Oxygen</string>
     <string name="Confidencetxt">Confidence</string>
     <string name="save_btn">Save</string>
+    <string name="title_devices">Main</string>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="label_device_address">Address</string>
+    <string name="label_state">State</string>
+    <string name="disconnected_text">disconnected</string>
+    <string name="label_data_text">Label_data</string>
+    <string name="no_data_text">No Data</string>
+    <string name="connected_text">connect</string>
+    <string name="no_data">No data</string>
+
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <string name="User1_Text" translatable="false" >User1</string>
+    <string name="User2_text">User2</string>
+    <string name="GPS_btn">GPS</string>
+    <string name="GPS2_btn">GPS</string>
+    <string name="Online_text">Online</string>
+    <string name="RunBtn">Run</string>
 </resources>

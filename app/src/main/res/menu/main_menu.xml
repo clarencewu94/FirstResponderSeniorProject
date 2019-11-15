@@ -9,12 +9,6 @@
         android:id="@+id/action_logout_btn"
         android:title="@string/action_logout_text" />
     <item
-        android:id="@+id/enable_ble_btn"
-        android:title="@string/enable_ble_text" />
-    <item
-        android:id="@+id/Discover_btn"
-        android:title="@string/discoverable_text" />
-    <item
         android:id="@+id/scan_btn"
         android:title="@string/scan_btn_text" />
 </menu>

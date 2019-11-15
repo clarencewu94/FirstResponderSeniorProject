@@ -18,17 +18,19 @@
 
  </androidx.appcompat.widget.Toolbar>
 
- <ListView
+ <ExpandableListView
      android:id="@+id/lvNewDevices"
      android:layout_width="413dp"
-     android:layout_height="672dp"
+     android:layout_height="381dp"
 
      app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintHorizontal_bias="0.0"
+     app:layout_constraintHorizontal_bias="1.0"
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toBottomOf="@+id/main_toolbar"
-     app:layout_constraintVertical_bias="0.0" />
+     app:layout_constraintVertical_bias="1.0">
+
+ </ExpandableListView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,8 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +35,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.CollectionReference;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -40,6 +46,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.example.draft.MainActivity.Discovery;
 
 public class AccountSettings extends AppCompatActivity {
 /*Profile Page, should include, Create Names (not email names)
@@ -69,6 +77,15 @@ Graph
     TextView HR_Peaktxt, HR_Lowest_txt, Oxygentxt, Confidencetxt;
     Button save_btn;
     UserID UserIDN;
+    public final static String EXTRA_DATA =
+            "com.example.draft.EXTRA_DATA";
+    //-----------------------------------------//For Graph
+    private LineGraphSeries<DataPoint> series;
+    private int lastX = 0;
+    public boolean isRunning = true;
+
+    //-----------------------------------------//for bluetooth data
+
 
     public AccountSettings() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -96,6 +113,133 @@ Graph
         set_age = (EditText) findViewById(R.id.set_age);
         save_btn = (Button) findViewById(R.id.save_btn);
 
+        //TextView setup
+        HR_Peaktxt = (TextView) findViewById(R.id.HRPeakEdit);
+        HR_Lowest_txt = (TextView) findViewById(R.id.HR_Lowest_txt);
+        Oxygentxt = (TextView) findViewById(R.id.OxygenEdit);
+        Confidencetxt = (TextView) findViewById(R.id.ConfidenceEdit);
+
+        //Graph
+        GraphView graph = (GraphView)findViewById(R.id.graph);
+        Button Run = (Button) findViewById(R.id.RunGraph);
+
+        //Create the Datapoints
+        series = new LineGraphSeries<DataPoint>();
+        graph.addSeries(series);
+
+        //Viewport
+        Viewport viewport = graph.getViewport();
+        viewport.setYAxisBoundsManual(true);
+        viewport.setMinY(60);
+        viewport.setMaxY(110);
+        viewport.setScrollable(true);
+        // Creating onClickListener for the "RUN" Button
+        Run.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                isRunning=true;
+
+                // Create a thread to run the graph
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        while (isRunning==true) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addEntry();
+                                }
+                            });
+                            // using sleep to slow down the addition of new points
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                System.out.print(e.getMessage());
+                            }
+                        }
+                    }
+                }).start();
+            }
+        });
+
+        HR_Peaktxt.addTextChangedListener(generalTextWatcher);
+        HR_Lowest_txt.addTextChangedListener(generalTextWatcher);
+        Oxygentxt.addTextChangedListener(generalTextWatcher);
+        Confidencetxt.addTextChangedListener(generalTextWatcher);
+    }
+    private TextWatcher generalTextWatcher = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+
+//            if (HR_Peaktxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText1_onTextChanged(s, start, before, count);
+//            }
+//            else if (HR_Lowest_txt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_onTextChanged(s, start, before, count);
+//            }
+//            else if (Oxygentxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_onTextChanged(s, start, before, count);
+//            }
+//            else if (Confidencetxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_onTextChanged(s, start, before, count);
+//            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+
+//            if (HR_Peaktxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText1_beforeTextChanged(s, start, count, after);
+//            }
+//            else if (HR_Lowest_txt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_beforeTextChanged(s, start, count, after);
+//            }
+//            else if (Oxygentxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_beforeTextChanged(s, start, count, after);
+//            }
+//            else if (Confidencetxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_beforeTextChanged(s, start, count, after);
+//            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+//            if (HR_Peaktxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText1_afterTextChanged(s);
+//            }
+//            else if (HR_Lowest_txt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_afterTextChanged(s);
+//            }
+//            else if (Oxygentxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_afterTextChanged(s);
+//            }
+//            else if (Confidencetxt.getText().hashCode() == s.hashCode())
+//            {
+//                myEditText2_afterTextChanged(s);
+//            }
+        }
+
+    };
+    // Method that adds new points to the graph
+    private void addEntry() {
+
+
+        //series.appendData(new DataPoint(lastX++,60+ rand.nextDouble() * 40d), true, 10);
+       // series.appendData(new DataPoint(lastX++,60+ EXTRA_DATA.nextDouble() * 40d), true, 10);
     }
         public void AddInfo(View view){
             String AddName = set_name.getText().toString();
@@ -120,6 +264,8 @@ Graph
 
                 }
             });
+
+
             //from https://www.youtube.com/watch?v=kDZYIhNkQoM
 //            mCollection.set(DataToSave).addOnCompleteListener(new OnCompleteListener<Void>() {
 //                @Override
@@ -135,18 +281,6 @@ Graph
 
         }
 
-//
-//        public void Graph{
-//            GraphView graph = (GraphView) findViewById(R.id.graph);
-//            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-//                    new DataPoint(0, 1),
-//                    new DataPoint(1, 5),
-//                    new DataPoint(2, 3),
-//                    new DataPoint(3, 2),
-//                    new DataPoint(4, 6)
-//            });
-//            graph.addSeries(series);
-//        }
 
     }
 
