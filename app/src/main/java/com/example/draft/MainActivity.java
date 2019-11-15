@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity{
             DeviceScanActivity scanLeDevice = new DeviceScanActivity();
             scanLeDevice.scanLeDevice(true);
         }
-
+        //DeviceScanActivity.onListItemClick
 //-----------------------------Testing----------------------------------------
     }
 }
