@@ -6,15 +6,108 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+ <LinearLayout
+     android:id="@+id/linearLayout"
+     android:layout_width="385dp"
+     android:layout_height="79dp"
+     android:orientation="horizontal"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="0.125">
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/label_device_address"
+      android:textSize="18sp" />
+
+  <Space
+      android:layout_width="5dp"
+      android:layout_height="wrap_content" />
+
+  <TextView
+      android:id="@+id/device_address"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="18sp" />
+ </LinearLayout>
+
+ <LinearLayout
+     android:id="@+id/linearLayout2"
+     android:layout_width="398dp"
+     android:layout_height="58dp"
+     android:layout_marginTop="268dp"
+     android:orientation="horizontal"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.461"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="0.0">
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/label_state"
+      android:textSize="18sp" />
+
+  <Space
+      android:layout_width="5dp"
+      android:layout_height="wrap_content" />
+
+  <TextView
+      android:id="@+id/connection_state"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/disconnected_text"
+      android:textSize="18sp" />
+ </LinearLayout>
+
+ <LinearLayout
+     android:id="@+id/linearLayout3"
+     android:layout_width="394dp"
+     android:layout_height="61dp"
+     android:layout_margin="10dp"
+     android:orientation="horizontal"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.764"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+     app:layout_constraintVertical_bias="0.041">
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/label_data_text"
+      android:textSize="18sp" />
+
+  <Space
+      android:layout_width="5dp"
+      android:layout_height="wrap_content" />
+
+  <TextView
+      android:id="@+id/data_value"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/disconnected_text"
+      android:textSize="18sp" />
+ </LinearLayout>
+
  <androidx.appcompat.widget.Toolbar
      android:id="@+id/main_toolbar"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:background="@color/colorPrimary"
      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+     app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.0"
      app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toTopOf="parent">
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="0.0">
 
  </androidx.appcompat.widget.Toolbar>
 

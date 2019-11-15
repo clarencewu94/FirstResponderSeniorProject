@@ -53,10 +53,11 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
-    <string name="User1_Text" translatable="false" >User1</string>
+    <string name="User1_Text" translatable="false">User1</string>
     <string name="User2_text">User2</string>
     <string name="GPS_btn">GPS</string>
     <string name="GPS2_btn">GPS</string>
     <string name="Online_text">Online</string>
     <string name="RunBtn">Run</string>
+    <string name="title_activity_maps2">Map</string>
 </resources>

@@ -59,7 +59,7 @@ public class MainActivity2   extends AppCompatActivity {
         mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
 
-        getSupportActionBar().setTitle("Main Page");
+        getSupportActionBar().setTitle("Main Page 2");
 
         TextView User1 = (TextView) findViewById(R.id.User1);
         TextView User2 = (TextView) findViewById(R.id.User2);
