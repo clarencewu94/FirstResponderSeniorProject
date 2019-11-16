@@ -60,4 +60,5 @@
     <string name="Online_text">Online</string>
     <string name="RunBtn">Run</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="MainPage_text">Main Page</string>
 </resources>

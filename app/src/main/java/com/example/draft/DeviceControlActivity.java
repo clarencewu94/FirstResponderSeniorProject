@@ -69,6 +69,8 @@ public class DeviceControlActivity extends Activity {
 
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
+    private DeviceScanActivity.DeviceListAdapter mDevListAdapter;
+    public DeviceScanActivity.DeviceListAdapter getDeviceListAdapter() {return mDevListAdapter;}
 
     //--------------//forGraph
     private final Handler mHandler = new Handler();
@@ -166,7 +168,7 @@ public class DeviceControlActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main3);
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);

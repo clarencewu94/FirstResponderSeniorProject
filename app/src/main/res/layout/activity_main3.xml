@@ -112,7 +112,7 @@
  </androidx.appcompat.widget.Toolbar>
 
  <ExpandableListView
-     android:id="@+id/lvNewDevices"
+     android:id="@android:id/list"
      android:layout_width="415dp"
      android:layout_height="399dp"
 

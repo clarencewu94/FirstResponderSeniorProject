@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,7 +49,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.draft.MainActivity.Discovery;
 
 public class AccountSettings extends AppCompatActivity {
 /*Profile Page, should include, Create Names (not email names)
@@ -166,6 +167,49 @@ Graph
         HR_Lowest_txt.addTextChangedListener(generalTextWatcher);
         Oxygentxt.addTextChangedListener(generalTextWatcher);
         Confidencetxt.addTextChangedListener(generalTextWatcher);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_logout_btn:
+                logout();
+                return true;
+            case R.id.main_btn:
+                mainpage();
+                return true;
+//            case R.id.scan_btn:
+//                //mLeDeviceListAdapter.clear();
+//                onScanButton();
+//                Toast.makeText(this, "Scanning for Devices", Toast.LENGTH_SHORT).show();
+//                return true;
+            default:
+                break;
+        }
+        return false;
+
+    }
+    //Logging out
+    private void logout() {
+        mAuth.signOut();
+        sendToLogin();
+    }
+    private void sendToLogin() {
+        Intent loginIntent = new Intent(AccountSettings.this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();//makes sure user does not go back, finished intent
+    }
+    private void mainpage(){
+        Intent loginIntent = new Intent(AccountSettings.this, MainActivity.class);
+        startActivity(loginIntent);
+        finish();//makes sure user does not go back, finished intent
     }
     private TextWatcher generalTextWatcher = new TextWatcher() {
 
