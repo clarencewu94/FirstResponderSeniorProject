@@ -18,13 +18,13 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="398dp"
-        android:layout_height="58dp"
+        android:layout_width="365dp"
+        android:layout_height="52dp"
         android:layout_marginTop="268dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintHorizontal_bias="0.608"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
@@ -49,8 +49,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="394dp"
-        android:layout_height="61dp"
+        android:layout_width="368dp"
+        android:layout_height="49dp"
         android:layout_margin="10dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,8 +80,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="385dp"
-        android:layout_height="79dp"
+        android:layout_width="345dp"
+        android:layout_height="53dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,14 +108,15 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="416dp"
-        android:layout_height="125dp"
+        android:layout_width="387dp"
+        android:layout_height="179dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="28dp"
         android:layout_weight="1"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.606"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/main_toolbar"
         app:layout_constraintVertical_bias="0.638">
@@ -192,7 +193,7 @@
                     <Button
                         android:id="@+id/GPS1"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="@string/GPS_btn" />
 
                 </TableRow>
@@ -225,7 +226,7 @@
                     <Button
                         android:id="@+id/GPS2"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="@string/GPS2_btn" />
                 </TableRow>
             </TableLayout>

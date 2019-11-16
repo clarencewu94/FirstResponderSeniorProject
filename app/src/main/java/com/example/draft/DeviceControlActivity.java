@@ -47,13 +47,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * For a given BLE device, this Activity provides the user interface to connect, display data,
- * and display GATT services and characteristics supported by the device.  The Activity
- * communicates with {@code BluetoothLeService}, which in turn interacts with the
- * Bluetooth LE API.
- */
 public class DeviceControlActivity extends AppCompatActivity {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
@@ -73,10 +68,6 @@ public class DeviceControlActivity extends AppCompatActivity {
 
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
-    private DeviceScanActivity.DeviceListAdapter mDevListAdapter;
-    public DeviceScanActivity.DeviceListAdapter getDeviceListAdapter() {return mDevListAdapter;}
-    private Toolbar mainToolbar;
-
     //--------------//forGraph
     private final Handler mHandler = new Handler();
     private Runnable mTimer;
@@ -174,7 +165,9 @@ public class DeviceControlActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mBluetoothLeService = new BluetoothLeService();
+        Toolbar toolbar = findViewById(R.id.second_toolbar);
+        setSupportActionBar(toolbar);
+
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -196,35 +189,23 @@ public class DeviceControlActivity extends AppCompatActivity {
             Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
             setSupportActionBar(mToolbar);
             getSupportActionBar().setTitle(mDeviceName);
-           // getActionBar().setDisplayHomeAsUpEnabled(true);
+            // getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
         GraphView graphView = (GraphView) findViewById(R.id.graph);
         //initGraph(graph);
     }
-        public void initGraph(GraphView graph){
-        graph.getViewport().setXAxisBoundsManual(true);
-
-        }
 
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-       // mBluetoothLeService = new BluetoothLeService(); makes it work but cannot auto connect
-        //if used can go to the thing, but connect button crashes
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }
-        else{
-            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
-        }
-
     }
 
     @Override
@@ -247,10 +228,12 @@ public class DeviceControlActivity extends AppCompatActivity {
             menu.findItem(R.id.menu_connect).setVisible(false);
             menu.findItem(R.id.menu_disconnect).setVisible(true);
             menu.findItem(R.id.Main_Page_2).setVisible(true);
+
         } else {
             menu.findItem(R.id.menu_connect).setVisible(true);
             menu.findItem(R.id.menu_disconnect).setVisible(false);
             menu.findItem(R.id.Main_Page_2).setVisible(true);
+
         }
         return true;
     }
@@ -269,10 +252,10 @@ public class DeviceControlActivity extends AppCompatActivity {
                 return true;
             case R.id.Main_Page_2:
                 GoToActivity2();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
     private void GoToActivity2() {
         sendToAct2Page();
 
@@ -282,7 +265,6 @@ public class DeviceControlActivity extends AppCompatActivity {
         Intent Active2intent = new Intent(DeviceControlActivity.this, MainActivity2.class);
         startActivity(Active2intent);
     }
-
     private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {
             @Override
