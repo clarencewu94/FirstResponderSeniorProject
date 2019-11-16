@@ -16,6 +16,7 @@
 
 package com.example.draft;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -36,6 +37,9 @@ import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -50,7 +54,7 @@ import java.util.List;
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends Activity {
+public class DeviceControlActivity extends AppCompatActivity {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -71,6 +75,7 @@ public class DeviceControlActivity extends Activity {
     private final String LIST_UUID = "UUID";
     private DeviceScanActivity.DeviceListAdapter mDevListAdapter;
     public DeviceScanActivity.DeviceListAdapter getDeviceListAdapter() {return mDevListAdapter;}
+    private Toolbar mainToolbar;
 
     //--------------//forGraph
     private final Handler mHandler = new Handler();
@@ -168,8 +173,8 @@ public class DeviceControlActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
-
+        setContentView(R.layout.activity_main);
+        mBluetoothLeService = new BluetoothLeService();
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -181,8 +186,19 @@ public class DeviceControlActivity extends Activity {
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         mDataField = (TextView) findViewById(R.id.data_value);
 
-        getActionBar().setTitle(mDeviceName);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null ) {
+            Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setTitle(mDeviceName);
+            //getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        else{
+            Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setTitle(mDeviceName);
+           // getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
@@ -198,10 +214,17 @@ public class DeviceControlActivity extends Activity {
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+       // mBluetoothLeService = new BluetoothLeService(); makes it work but cannot auto connect
+        //if used can go to the thing, but connect button crashes
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }
+        else{
+            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+            Log.d(TAG, "Connect request result=" + result);
+        }
+
     }
 
     @Override
@@ -223,9 +246,11 @@ public class DeviceControlActivity extends Activity {
         if (mConnected) {
             menu.findItem(R.id.menu_connect).setVisible(false);
             menu.findItem(R.id.menu_disconnect).setVisible(true);
+            menu.findItem(R.id.Main_Page_2).setVisible(true);
         } else {
             menu.findItem(R.id.menu_connect).setVisible(true);
             menu.findItem(R.id.menu_disconnect).setVisible(false);
+            menu.findItem(R.id.Main_Page_2).setVisible(true);
         }
         return true;
     }
@@ -242,8 +267,20 @@ public class DeviceControlActivity extends Activity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.Main_Page_2:
+                GoToActivity2();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void GoToActivity2() {
+        sendToAct2Page();
+
+    }
+
+    private void sendToAct2Page() {
+        Intent Active2intent = new Intent(DeviceControlActivity.this, MainActivity2.class);
+        startActivity(Active2intent);
     }
 
     private void updateConnectionState(final int resourceId) {

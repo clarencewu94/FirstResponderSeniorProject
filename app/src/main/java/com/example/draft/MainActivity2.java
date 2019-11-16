@@ -32,7 +32,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class MainActivity2   extends AppCompatActivity {
-    private static final String Tag = "MainActivity";
+    private static final String Tag = "MainActivity2";
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdaptor;
@@ -56,7 +56,7 @@ public class MainActivity2   extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mBluetoothAdaptor = BluetoothAdapter.getDefaultAdapter();
 
-        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        mainToolbar = (Toolbar) findViewById(R.id.ThirdToolbar);
         setSupportActionBar(mainToolbar);
 
         getSupportActionBar().setTitle("Main Page 2");

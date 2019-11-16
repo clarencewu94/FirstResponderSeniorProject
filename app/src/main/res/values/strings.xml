@@ -61,4 +61,5 @@
     <string name="RunBtn">Run</string>
     <string name="title_activity_maps2">Map</string>
     <string name="MainPage_text">Main Page</string>
+    <string name="MainPage2_btn">Main Page 2</string>
 </resources>

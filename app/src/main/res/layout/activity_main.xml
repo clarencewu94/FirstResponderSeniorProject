@@ -8,16 +8,15 @@
 
  <LinearLayout
      android:id="@+id/linearLayout2"
-     android:layout_width="398dp"
-     android:layout_height="58dp"
-     android:layout_marginTop="268dp"
+     android:layout_width="352dp"
+     android:layout_height="39dp"
      android:orientation="horizontal"
      app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintHorizontal_bias="0.461"
+     app:layout_constraintHorizontal_bias="0.271"
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toTopOf="parent"
-     app:layout_constraintVertical_bias="0.0">
+     app:layout_constraintVertical_bias="0.273">
 
   <TextView
       android:layout_width="wrap_content"
@@ -39,16 +38,16 @@
 
  <LinearLayout
      android:id="@+id/linearLayout3"
-     android:layout_width="394dp"
-     android:layout_height="61dp"
+     android:layout_width="375dp"
+     android:layout_height="49dp"
      android:layout_margin="10dp"
      android:orientation="horizontal"
      app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintHorizontal_bias="0.764"
+     app:layout_constraintHorizontal_bias="0.0"
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-     app:layout_constraintVertical_bias="0.041">
+     app:layout_constraintVertical_bias="0.0">
 
   <TextView
       android:layout_width="wrap_content"
@@ -70,14 +69,15 @@
 
  <LinearLayout
      android:id="@+id/linearLayout"
-     android:layout_width="385dp"
-     android:layout_height="79dp"
+     android:layout_width="378dp"
+     android:layout_height="47dp"
      android:orientation="horizontal"
      app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.181"
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toTopOf="parent"
-     app:layout_constraintVertical_bias="0.125">
+     app:layout_constraintVertical_bias="0.103">
 
   <TextView
       android:layout_width="wrap_content"
@@ -113,8 +113,8 @@
 
  <ExpandableListView
      android:id="@+id/lvNewDevices"
-     android:layout_width="415dp"
-     android:layout_height="399dp"
+     android:layout_width="392dp"
+     android:layout_height="487dp"
 
      app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
