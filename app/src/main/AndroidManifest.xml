@@ -54,7 +54,9 @@
         <activity
             android:name="com.example.draft.DeviceScanActivity"/>
         <activity
-            android:name="com.example.draft.DeviceControlActivity"/>
+        android:name="com.example.draft.DeviceControlActivity"/>
+        <service
+            android:name="com.example.draft.BluetoothLeService"/>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />

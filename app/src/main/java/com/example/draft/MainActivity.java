@@ -46,15 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static HashMap<String, String> attributes = new HashMap();
-    private static final UUID[] HEART_RATE_MEASUREMENT = new UUID[] {
-            UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT)};
-
-    private boolean isConnected;
-
-    public static String lookup(String uuid, String defaultName) {
-        String name = attributes.get(uuid);
-        return name == null ? defaultName : name;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

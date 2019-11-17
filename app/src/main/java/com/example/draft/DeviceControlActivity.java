@@ -167,6 +167,7 @@ public class DeviceControlActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.second_toolbar);
         setSupportActionBar(toolbar);
+        //mBluetoothLeService = new BluetoothLeService();
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -237,12 +238,12 @@ public class DeviceControlActivity extends AppCompatActivity {
         }
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_connect:
-                mBluetoothLeService.connect(mDeviceAddress);
+                //mBluetoothLeService.connect(mDeviceAddress);
+                Connect();
                 return true;
             case R.id.menu_disconnect:
                 mBluetoothLeService.disconnect();
@@ -256,6 +257,15 @@ public class DeviceControlActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void Connect() {
+        mBluetoothLeService = new BluetoothLeService();
+        mBluetoothLeService.connect(mDeviceAddress);
+
+//        Intent Active2intent = new Intent(DeviceControlActivity.this, BluetoothLeService.class);
+//        startActivity(Active2intent);
+    }
+
     private void GoToActivity2() {
         sendToAct2Page();
 
