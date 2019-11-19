@@ -1,18 +1,25 @@
 package com.example.draft;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +30,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -33,6 +42,11 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     private static final String Tag = "MainActivity";
+    public static final int ERROR_DIALOG_REQUEST = 9001;
+
+    public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
+    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
+
     Button Scan;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     public DeviceScanActivity.DeviceListAdapter mLeDeviceListAdapter;
@@ -43,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     ListView lvNewDevices;
 
     private FirebaseAuth mAuth;
-
+    //if accepted, set to true, not able to navigate to other features
+    private boolean mLocationPermissionGranted = false;
 
     private static HashMap<String, String> attributes = new HashMap();
 
@@ -125,12 +140,16 @@ public class MainActivity extends AppCompatActivity {
                 onScanButton();
                 Toast.makeText(this, "Scanning for Devices", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.MainP2:
+                MainP2();
+                return true;
             default:
                 break;
         }
-                return false;
+        return false;
 
     }
+
 
 
     /*--------------------------------------------Definitions here----------------------------------------------------   */
@@ -157,6 +176,16 @@ public class MainActivity extends AppCompatActivity {
         finish();//makes sure user does not go back, finished intent
     }
 
+    private void MainP2() {
+        sendToMain2();
+    }
+
+    private void sendToMain2() {
+        Intent Main2Intent = new Intent(MainActivity.this, MainActivity2.class);
+        startActivity(Main2Intent);
+        finish();//makes sure user does not go back, finished intent
+    }
+
     private static final int REQUEST_ENABLE_BT = 1;
 
 
@@ -171,159 +200,114 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    //trying to get the device list adapter to work
-//    private void addListners(){
-//        Scan.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if(event.getAction()==MotionEvent.ACTION_BUTTON_PRESS){
-//                    Intent intent = new Intent(getApplicationContext(), DeviceScanActivity.class);
-//                    startActivity(intent);
-//                }
-//                return false;
-//            }
-//        });
-//    }
 
-    //https://stackoverflow.com/questions/22408063/getview-from-another-class
-    //https://stackoverflow.com/questions/4593232/how-to-call-a-method-in-another-class-in-java
-//    public MainActivity(View view){
-//        mLeDeviceListAdapter = new DeviceListAdapter();
-//        View gView = DeviceListAdapter.getView(DeviceListAdapter);
-//        lvNewDevices = findViewById(R.id.lvNewDevices);
-//        lvNewDevices.addView(gView);
-//    }
-//    private Handler mHandler;
-//    private static final long SCAN_PERIOD = 20000;   // Stops scanning after 10 seconds.
-//
-//    private void scanLeDevice(boolean enable) {
-//        mBluetoothAdapter =  BluetoothAdapter.getDefaultAdapter();
-//        mHandler = new Handler();
-//        if (mBluetoothAdapter != null){
-//            if (enable) {
-//
-//                // Stops scanning after a pre-defined scan period.
-//                mHandler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mScanning = false;
-//                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//                    }
-//                }, SCAN_PERIOD);
-//
-//                mScanning = true;
-//                mBluetoothAdapter.startLeScan(HEART_RATE_MEASUREMENT, mLeScanCallback);
-//            }
-//        }
-//        else{
-//            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//            mScanning = false;
-//            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//        }
-//    }
-//
-//
-//    private boolean mScanning = false;
-//    private ArrayList<BluetoothDevice> mLeDevices;
-//    private LayoutInflater mInflator;
-//    private DeviceListAdapter leDeviceListAdapter;
+    private boolean checkMapServices() {
+        if (isServicesOK()) {
+            if (isMapsEnabled()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //tells user to enables it if it does not have gps enabled.
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+    //GPS, determines if application has GPS enabled on device
+    public boolean isMapsEnabled() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+            return false;
+        }
+        return true;
+    }
 
-//    protected void onListItemClick(ListView l, View v, int position, long id) {
-//        final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
-//        if (device == null) return;
-//        final Intent intent = new Intent(this, DeviceControlActivity.class);
-//        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-//        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
-//        if (mScanning) {
-//            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//            mScanning = false;
-//        }
-//        startActivity(intent);
-//    }
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+    //determine if devices can use google services
+    public boolean isServicesOK() {
+        Log.d(Tag, "isServicesOK: checking google services version");
 
-//    public BluetoothAdapter.LeScanCallback mLeScanCallback =
-//            new BluetoothAdapter.LeScanCallback() {
-//
-//                @Override
-//                public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            DeviceListAdapter addDevice = new DeviceListAdapter();
-//                            addDevice.addDevice(device);
-//                            addDevice.notifyDataSetChanged();
-//                        }
-//                    });
-//                }
-//            };
-//    public BluetoothDevice getDevice(int position) {
-//        return mLeDevices.get(position);
-//    }
-//    public void addDevice(BluetoothDevice device) {
-//        if (!mLeDevices.contains(device)) {
-//            mLeDevices.add(device);
-//        }
-//    }
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
 
-//    DeviceListAdapter.ViewHolder getmLeDeviceListAdapter = new DeviceListAdapter.ViewHolder() {
-//    public View getView(int i, View view, ViewGroup viewGroup) {
-//        DeviceListAdapter.ViewHolder viewHolder;
-//        // General ListView optimization code.
-//        if (view == null) {
-//            view = mInflator.inflate(R.layout.device_adapter_view, null);
-//            viewHolder = new DeviceListAdapter.ViewHolder();
-//            viewHolder.deviceAddress = (TextView) view.findViewById(R.id.tvDeviceAddress);
-//            viewHolder.deviceName = (TextView) view.findViewById(R.id.tvDeviceName);
-//            view.setTag(viewHolder);
-//        } else {
-//            viewHolder = (DeviceListAdapter.ViewHolder) view.getTag();
-//        }
-//
-//        BluetoothDevice device = mLeDevices.get(i);
-//        final String deviceName = device.getName();
-//        if (deviceName != null && deviceName.length() > 0)
-//            viewHolder.deviceName.setText(deviceName);
-//        else
-//            viewHolder.deviceName.setText(R.string.unknown_device);
-//        viewHolder.deviceAddress.setText(device.getAddress());
-//
-//        return view;
-//    }
-//    };
+        if (available == ConnectionResult.SUCCESS) {
+            //everything is fine and the user can make map requests
+            Log.d(Tag, "isServicesOK: Google Play Services is working");
+            return true; //return true if google services is usable.
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            //an error occured but we can resolve it
+            Log.d(Tag, "isServicesOK: an error occured but we can fix it");
+            //Dialog to download this
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        } else {
+            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+    //CHECKS for the constant
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(Tag, "onActivityResult: called.");
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ENABLE_GPS: {
+                if (!mLocationPermissionGranted) {
+                    getLocationPermission();
+                }
+            }
+        }
+
+    }
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        if(checkMapServices()){
+            if(!mLocationPermissionGranted){
+                getLocationPermission();
+            }
+        }
+    }
 }
-//            DeviceControlActivity.setOnScanListener(new OnScanListener() {
-//                @Override
-//                public void onScanFinished() {
-//                    ((Button)v).setText("scan");
-//                    ((Button)v).setEnabled(true);
-//                }
-//                @Override
-//                public void onScan(BluetoothDevice device, int rssi, byte[] scanRecord) {}
-//            });
-//            ((Button)v).setText("scanning");
-//            ((Button)v).setEnabled(false);
-//            mLeDeviceListAdapter = new DeviceListAdapter();
-//            DeviceScanActivity scanLeDevice = new DeviceScanActivity();
-//            scanLeDevice.scanLeDevice(true);
-//        }
-//
-//
-//
-//    public void setConnectStatus(boolean isConnected){
-//        this.isConnected = isConnected;
-//        DeviceControlActivity Control = new DeviceControlActivity();
-//
-//        if(isConnected){
-//            showMessage("Connection successful");
-//            Scan.setText("break");
-//        }else{
-//            Control.onPause();
-//            Control.onDestroy();
-//            Scan.setText("scan");
-//        }
-//    }
-//    private void showMessage(String str){
-//        Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
-//    }
-

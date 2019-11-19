@@ -111,10 +111,18 @@
 
  </androidx.appcompat.widget.Toolbar>
 
+ <LinearLayout
+     android:id="@+id/linearLayout4"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="vertical">
+
+ </LinearLayout>
+
  <ExpandableListView
      android:id="@+id/lvNewDevices"
-     android:layout_width="392dp"
-     android:layout_height="487dp"
+     android:layout_width="410dp"
+     android:layout_height="283dp"
 
      app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
@@ -124,6 +132,14 @@
      app:layout_constraintVertical_bias="1.0">
 
  </ExpandableListView>
+
+ <com.jjoe64.graphview.GraphView
+     android:id="@+id/graph"
+     android:layout_width="match_parent"
+     android:layout_height="180dp"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="@+id/linearLayout4" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

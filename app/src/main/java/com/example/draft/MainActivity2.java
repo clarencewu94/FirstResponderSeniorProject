@@ -23,6 +23,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.core.OnlineState;
@@ -41,10 +46,22 @@ public class MainActivity2   extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
+
     private Button GPS1btn;
     private Button GPS2btn;
-    private EditText OnlineStatus;
+    private Button GPSRedirect;
 
+    private EditText OnlineStatus;
+    private TextView User1;
+    private TextView User2;
+    private TextView Heart1;
+    private TextView Heart2;
+    private  TextView Ox1;
+    private  TextView Ox2;
+    private   Button GPS1;
+    private Button GPS2;
 
 
     //in your OnCreate() method
@@ -58,18 +75,60 @@ public class MainActivity2   extends AppCompatActivity {
 
         mainToolbar = (Toolbar) findViewById(R.id.ThirdToolbar);
         setSupportActionBar(mainToolbar);
-
         getSupportActionBar().setTitle("Main Page 2");
 
-        TextView User1 = (TextView) findViewById(R.id.User1);
-        TextView User2 = (TextView) findViewById(R.id.User2);
-        TextView Heart1 = (TextView) findViewById(R.id.Heart1);
-        TextView Heart2 = (TextView) findViewById(R.id.Heart2);
-        TextView Ox1 = (TextView) findViewById(R.id.Ox1);
-        TextView Ox2 = (TextView) findViewById(R.id.Ox2);
+         User1 = (TextView) findViewById(R.id.User1);
+         User2 = (TextView) findViewById(R.id.User2);
+         Heart1 = (TextView) findViewById(R.id.Heart1);
+         Heart2 = (TextView) findViewById(R.id.Heart2);
+         Ox1 = (TextView) findViewById(R.id.Ox1);
+         Ox2 = (TextView) findViewById(R.id.Ox2);
         OnlineStatus = (EditText) findViewById(R.id.reg_email);
-        Button GPS1 = (Button) findViewById(R.id.GPS1);
-        Button GPS2 = (Button) findViewById(R.id.GPS2);
+         GPS1 = (Button) findViewById(R.id.GPS1);
+         GPS2 = (Button) findViewById(R.id.GPS2);
+        GPSRedirect = (Button) findViewById(R.id.GPS_BTN);
+
+        //database firebase firestore
+        mDatabase = FirebaseDatabase.getInstance().getReference("UserID");
+        final String Name = mDatabase.push().getKey();
+        mDatabase.child("Name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String playerName = dataSnapshot.getValue(String.class);
+                User1.setText(playerName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        GPSRedirect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity2.this, MapActivity.class);
+                startActivity(i);
+            }
+        });
+
+
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 //        USer1.setText("My Awesome Text");
 //        GPS1.setOnClickListener(new View.OnClickListener(){
@@ -102,7 +161,7 @@ public class MainActivity2   extends AppCompatActivity {
 //            }
 //
 //        });
-    }
+
 
 //    public makeUserOnline(){
 //        var query = FirebaseFirestore.getInstance().collection("UserID").document(user.userId ?: "");
@@ -154,4 +213,4 @@ public class MainActivity2   extends AppCompatActivity {
 //        }
 //    });
 
-}
+

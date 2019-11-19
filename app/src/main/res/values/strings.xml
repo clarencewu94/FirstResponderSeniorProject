@@ -62,4 +62,7 @@
     <string name="title_activity_maps2">Map</string>
     <string name="MainPage_text">Main Page</string>
     <string name="MainPage2_btn">Main Page 2</string>
+    //For avoiding charging reasons, API key will be deleted after senior project.
+    <string name="google_map_api_key">AIzaSyBMkuZa4YaSMY3Vg3QlwuAsVJeLpxJ6u1Y</string>
+    <string name="GPSDirect">Press here for GPS</string>
 </resources>

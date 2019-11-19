@@ -16,6 +16,7 @@
 
 package com.example.draft;
 
+import android.accounts.Account;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -40,14 +41,20 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class DeviceControlActivity extends AppCompatActivity {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
@@ -71,9 +78,11 @@ public class DeviceControlActivity extends AppCompatActivity {
     //--------------//forGraph
     private final Handler mHandler = new Handler();
     private Runnable mTimer;
-    private double GraphLastXValue = 5d;
+    private double graphLastXValue = 5d;
     private LineGraphSeries<DataPoint> mSeries;
+
     //--------------
+
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -117,7 +126,8 @@ public class DeviceControlActivity extends AppCompatActivity {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+               // displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+                convertStringtoData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             }
         }
     };
@@ -180,13 +190,12 @@ public class DeviceControlActivity extends AppCompatActivity {
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         mDataField = (TextView) findViewById(R.id.data_value);
 
-        if (getSupportActionBar() != null ) {
+        if (getSupportActionBar() != null) {
             Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
             setSupportActionBar(mToolbar);
             getSupportActionBar().setTitle(mDeviceName);
             //getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        else{
+        } else {
             Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
             setSupportActionBar(mToolbar);
             getSupportActionBar().setTitle(mDeviceName);
@@ -194,19 +203,102 @@ public class DeviceControlActivity extends AppCompatActivity {
         }
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        initGraph(graph);
+    }
+    public void initGraph(GraphView graph)
+    {
+        graph.getViewport().setXAxisBoundsManual(true);
 
-        GraphView graphView = (GraphView) findViewById(R.id.graph);
-        //initGraph(graph);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(4);
+
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(110);
+
+        graph.getViewport().setScrollable(true); // enables horizontal scrolling
+        graph.getViewport().setScalable(true); // enables horizontal zooming and scrolling
+
+
+        //graph.getGridLabelRenderer().setLabelVerticalWidth(100);
+        GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
+        gridLabel.setHorizontalAxisTitle("time");
+        gridLabel.setVerticalAxisTitle("Heart Rate");
+
+        // first mSeries is a line
+        mSeries = new LineGraphSeries<>();
+        mSeries.setDrawDataPoints(true);
+        mSeries.setDrawBackground(true);
+        graph.addSeries(mSeries);
+    }
+    //simple format is part of pushing to database
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+    String format = simpleDateFormat.format(new Date());
+    double convertedData = 0;
+    double convertStringtoData(String data)
+    {
+        if (data != null) {
+            mDataField.setText(data);
+            Log.i(TAG, "Value:"  + data);
+            convertedData = Integer.parseInt(data);
+            Log.i(TAG, "convertedValue:"  + convertedData);
+//  Converting to database
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("UserID/Heart Rate");
+            DatabaseReference myRef2 = database.getReference("UserID/Time");
+
+            myRef.push().setValue(convertedData);
+            myRef2.push().setValue(format = simpleDateFormat.format(new Date()));
+        }
+        return convertedData;
     }
 
+
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }
+
+        //#graphView
+        mTimer = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                graphLastXValue += 1.0;
+
+                /*mSeries.appendData(new DataPoint(graphLastXValue, getRandom()+speed_num),
+                        true, 22);*/;
+                        mSeries.appendData(new DataPoint(graphLastXValue, convertedData), //getRandom()
+                        true, 22);
+                mHandler.postDelayed(this, 330);
+            }
+        };
+        mHandler.postDelayed(mTimer, 1500);
+    }
+    public double PassTimer(){
+        mTimer = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                graphLastXValue += 1.0;
+
+                /*mSeries.appendData(new DataPoint(graphLastXValue, getRandom()+speed_num),
+                        true, 22);*/;
+                mSeries.appendData(new DataPoint(graphLastXValue, convertedData), //getRandom()
+                        true, 22);
+                mHandler.postDelayed(this, 330);
+            }
+        };
+        mHandler.postDelayed(mTimer, 1500);
+        return 0;
     }
 
     @Override
@@ -229,11 +321,14 @@ public class DeviceControlActivity extends AppCompatActivity {
             menu.findItem(R.id.menu_connect).setVisible(false);
             menu.findItem(R.id.menu_disconnect).setVisible(true);
             menu.findItem(R.id.Main_Page_2).setVisible(true);
+            menu.findItem(R.id.AccountSettingsbtn1).setVisible(true);
+
 
         } else {
             menu.findItem(R.id.menu_connect).setVisible(true);
             menu.findItem(R.id.menu_disconnect).setVisible(false);
             menu.findItem(R.id.Main_Page_2).setVisible(true);
+            menu.findItem(R.id.AccountSettingsbtn1).setVisible(true);
 
         }
         return true;
@@ -254,8 +349,20 @@ public class DeviceControlActivity extends AppCompatActivity {
             case R.id.Main_Page_2:
                 GoToActivity2();
                 return true;
+            case R.id.AccountSettingsbtn1:
+                AccountPage();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void AccountPage() {
+        sendToAccountPage();
+    }
+    private void sendToAccountPage() {
+        Intent AccountIntent = new Intent(DeviceControlActivity.this, AccountSettings.class);
+        startActivity(AccountIntent);
+        finish();//makes sure user does not go back, finished intent
     }
 
     private void Connect() {
@@ -293,6 +400,7 @@ public class DeviceControlActivity extends AppCompatActivity {
     // Demonstrates how to iterate through the supported GATT Services/Characteristics.
     // In this sample, we populate the data structure that is bound to the ExpandableListView
     // on the UI.
+
     private void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
         String uuid = null;
@@ -331,6 +439,7 @@ public class DeviceControlActivity extends AppCompatActivity {
             }
             mGattCharacteristics.add(charas);
             gattCharacteristicData.add(gattCharacteristicGroupData);
+
         }
 
         SimpleExpandableListAdapter gattServiceAdapter = new SimpleExpandableListAdapter(

@@ -3,6 +3,7 @@ package com.example.draft;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -37,6 +38,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.CollectionReference;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -65,14 +67,17 @@ Graph
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private DocumentReference mCollection = FirebaseFirestore.getInstance().collection("UserID").document("UserInfo");;
+    private DocumentReference mHRData = FirebaseFirestore.getInstance().collection("UserID").document("HeartRateInfo");;
+
     private FirebaseFirestore db;
     private Toolbar mainToolbar;
-
+    private DeviceControlActivity DeviceControl;
     public static final String NAME_KEY = "Name";
     public static final String AGE_KEY = "Age";
 
     public String username;
     public String email;
+    private TextView mDataField;
 
     EditText set_name, set_age;
     TextView HR_Peaktxt, HR_Lowest_txt, Oxygentxt, Confidencetxt;
@@ -81,10 +86,11 @@ Graph
     public final static String EXTRA_DATA =
             "com.example.draft.EXTRA_DATA";
     //-----------------------------------------//For Graph
-    private LineGraphSeries<DataPoint> series;
-    private int lastX = 0;
-    public boolean isRunning = true;
-
+    //--------------//forGraph
+    private final Handler mHandler = new Handler();
+    private Runnable mTimer;
+    private double graphLastXValue = 5d;
+    private LineGraphSeries<DataPoint> mSeries;
     //-----------------------------------------//for bluetooth data
 
 
@@ -103,10 +109,16 @@ Graph
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
         //For Main Toolbar
-        mainToolbar = (Toolbar) findViewById(R.id.second_toolbar);
-        setSupportActionBar(mainToolbar);
-        getSupportActionBar().setTitle("Account Page");
-
+        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        if (getSupportActionBar() != null) {
+            Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setTitle("Account Page");            //getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setTitle("Account Page");            // getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         //For FireStore
         db = FirebaseFirestore.getInstance();
         //Button, Text Setup
@@ -120,54 +132,16 @@ Graph
         Oxygentxt = (TextView) findViewById(R.id.OxygenEdit);
         Confidencetxt = (TextView) findViewById(R.id.ConfidenceEdit);
 
-        //Graph
-        GraphView graph = (GraphView)findViewById(R.id.graph);
-        Button Run = (Button) findViewById(R.id.RunGraph);
 
-        //Create the Datapoints
-        series = new LineGraphSeries<DataPoint>();
-        graph.addSeries(series);
-
-        //Viewport
-        Viewport viewport = graph.getViewport();
-        viewport.setYAxisBoundsManual(true);
-        viewport.setMinY(60);
-        viewport.setMaxY(110);
-        viewport.setScrollable(true);
-        // Creating onClickListener for the "RUN" Button
-        Run.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                isRunning=true;
-
-                // Create a thread to run the graph
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        while (isRunning==true) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addEntry();
-                                }
-                            });
-                            // using sleep to slow down the addition of new points
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                System.out.print(e.getMessage());
-                            }
-                        }
-                    }
-                }).start();
-            }
-        });
 
         HR_Peaktxt.addTextChangedListener(generalTextWatcher);
         HR_Lowest_txt.addTextChangedListener(generalTextWatcher);
         Oxygentxt.addTextChangedListener(generalTextWatcher);
         Confidencetxt.addTextChangedListener(generalTextWatcher);
+
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -185,11 +159,10 @@ Graph
             case R.id.main_btn:
                 mainpage();
                 return true;
-//            case R.id.scan_btn:
-//                //mLeDeviceListAdapter.clear();
-//                onScanButton();
-//                Toast.makeText(this, "Scanning for Devices", Toast.LENGTH_SHORT).show();
-//                return true;
+            case R.id.MainP3:
+                //mLeDeviceListAdapter.clear();
+                MainP2();
+                return true;
             default:
                 break;
         }
@@ -209,6 +182,15 @@ Graph
     private void mainpage(){
         Intent loginIntent = new Intent(AccountSettings.this, MainActivity.class);
         startActivity(loginIntent);
+        finish();//makes sure user does not go back, finished intent
+    }
+    private void MainP2() {
+        sendToMain2();
+    }
+
+    private void sendToMain2() {
+        Intent Main2Intent = new Intent(AccountSettings.this, MainActivity2.class);
+        startActivity(Main2Intent);
         finish();//makes sure user does not go back, finished intent
     }
     private TextWatcher generalTextWatcher = new TextWatcher() {

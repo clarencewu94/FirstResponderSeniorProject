@@ -20,6 +20,10 @@
         android:checkable="false"
         android:orderInCategory="1"
         android:title="@string/MainPage2_btn" />
+    <item
+        android:id="@+id/AccountSettingsbtn1"
+        android:orderInCategory="2"
+        android:title="@string/Account_page_text" />
     <item android:id="@+id/menu_connect"
           android:title="@string/menu_connect"
           android:orderInCategory="100"
