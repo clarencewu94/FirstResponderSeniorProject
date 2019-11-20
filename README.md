@@ -39,6 +39,7 @@ Create a new project with a basic activity that would act as your main page. Onc
 -------------------------------------------------------------------------------------------------------
 GPS(AT&T Github):
 This will be posted here on my partner's github:
+https://github.com/PC-Driver/SeniorProjectGPSScript
 
 -------------------------------------------------------------------------------------------------------
 
