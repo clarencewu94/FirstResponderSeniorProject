@@ -30,6 +30,9 @@ or through their github:
 	2.https://github.com/sparkfun/SparkFun_Bio_Sensor_Hub_Library
 
 The github for the Arduino/Mbed(MBED Library still in progress of creation) code for the SparkFun will be listed soon!
+Custom Library for SParkfun for Arduino listed here:
+https://github.com/clarencewu94/SparkFunArduinoHeartRate
+
 Android Studio:
 Create a new project with a basic activity that would act as your main page. Once in, create a new activity, or individual an resource/java class. Make another project with the sample example called BLUETOOTHLEGATT. This is the premise for our bluetooth connection that requires some modification to work. 
 
