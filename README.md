@@ -73,4 +73,5 @@ The end results should give you something like this:
 ![BluetoothGatt](Screenshots/BluetoothGattA.jpg)
 ![ATT_IoT](Screenshots/ATT_IoTA.jpg)
 
+Video:
 [![Demo Project](http://img.youtube.com/vi/SJquIdyTheQ/0.jpg)](http://www.youtube.com/watch?v=SJquIdyTheQ "Demo")
