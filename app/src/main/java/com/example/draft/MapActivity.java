@@ -1,13 +1,9 @@
 package com.example.draft;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
+import android.content.Context;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,144 +24,159 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+    FirebaseDatabase database;
+    DatabaseReference userLocationsRef;
+    GoogleMap mMap;
+    Context mContext;
     private static final String TAG = "MapActivity";
-    private String userID;
 
-    private GoogleMap mMap;
-    LocationManager locationManager;
-    private ChildEventListener mChildEventListener;
-    private FirebaseDatabase tracker;
-    private DatabaseReference databaseLocation;
-    private DatabaseReference mDatabase;
-    private DatabaseReference refDatabase;
-    Marker marker, marker1;
-    GoogleMap googleMap1;
-    GoogleMap gMap;
+    Map<String, Marker> mNamedMarkers = new HashMap<String, Marker>();
+
+    ChildEventListener markerUpdateListener = new ChildEventListener() {
+
+        /**
+         * Adds each existing/new location of a marker.
+         *
+         * Will silently update any existing markers as needed.
+         * @param dataSnapshot  The new location data
+         * @param previousChildName  The key of the previous child event
+         */
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+            String key = dataSnapshot.getKey();
+            Log.d(TAG, "Adding location for '" + key + "'");
+
+            Double lat = dataSnapshot.child("latitude").getValue(Double.class);
+            Double lng = dataSnapshot.child("longitude").getValue(Double.class);
+            LatLng location = new LatLng(lat, lng);
+
+            Marker marker = mNamedMarkers.get(key);
+
+            if (marker == null) {
+                MarkerOptions options = getMarkerOptions(key);
+                marker = mMap.addMarker(options.position(location));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14F));
+
+                mNamedMarkers.put(key, marker);
+            } else {
+                // This marker-already-exists section should never be called in this listener's normal use, but is here to handle edge cases quietly.
+                // TODO: Confirm if marker title/snippet needs updating.
+                marker.setPosition(location);
+            }
+        }
+
+        /**
+         * Updates the location of a previously loaded marker.
+         *
+         * Will silently create any missing markers as needed.
+         * @param dataSnapshot  The new location data
+         * @param previousChildName  The key of the previous child event
+         */
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+            String key = dataSnapshot.getKey();
+            Log.d(TAG, "Location for '" + key + "' was updated.");
+
+            Double lng = dataSnapshot.child("lang").getValue(Double.class);
+            Double lat = dataSnapshot.child("lat").getValue(Double.class);
+            LatLng location = new LatLng(lat, lng);
+
+            Marker marker = mNamedMarkers.get(key);
+
+            if (marker == null) {
+                // This null-handling section should never be called in this listener's normal use, but is here to handle edge cases quietly.
+                Log.d(TAG, "Expected existing marker for '" + key + "', but one was not found. Added now.");
+                MarkerOptions options = getMarkerOptions(key); // TODO: Read data from database for this marker (e.g. Name, Driver, Vehicle type)
+                marker = mMap.addMarker(options.position(location));
+                mNamedMarkers.put(key, marker);
+            } else {
+                // TODO: Confirm if marker title/snippet needs updating.
+                marker.setPosition(location);
+            }
+        }
+
+        /**
+         * Removes the marker from its GoogleMap instance
+         * @param dataSnapshot  The removed data
+         */
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+            String key = dataSnapshot.getKey();
+            Log.d(TAG, "Location for '" + key + "' was removed.");
+
+            Marker marker = mNamedMarkers.get(key);
+            if (marker != null)
+                marker.remove();
+        }
+
+        /**
+         * Ignored.
+         * @param dataSnapshot  The moved data
+         * @param previousChildName  The key of the previous child event
+         */
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+            // Unused
+            Log.d(TAG, "Priority for '" + dataSnapshot.getKey() + "' was changed.");
+        }
 
 
+        /**
+         * Error handler when listener is canceled.
+         * @param databaseError  The error object
+         */
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.w(TAG, "markerUpdateListener:onCancelled", databaseError.toException());
+            Toast.makeText(mContext, "Failed to load location markers.", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        tracker = FirebaseDatabase.getInstance();
-        mDatabase = tracker.getReference("UserID/Location");
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        mDatabase.addChildEventListener(new ChildEventListener() {
-
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.child("Location").getChildren()) {
-                    Coordinates mDatabase = dataSnapshot.getValue(Coordinates.class);
-                    String latitude = Objects.requireNonNull(child.child("Latitude").getValue()).toString();
-                    String longitude = Objects.requireNonNull(child.child("Longitude").getValue()).toString();
-                    double loclatitude = Double.parseDouble(latitude);
-                    double loclongitude = Double.parseDouble(longitude);
-                    LatLng cod = new LatLng(loclatitude, loclongitude);
-                    googleMap1.addMarker(new MarkerOptions().position(cod).title(""));
-                }
-            }
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-
-
-        });
     }
 
+    /**
+     * Waits for the map to be ready then loads markers from the database.
+     *
+     * @param googleMap The GoogleMap instance
+     */
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
-        googleMap1=googleMap;
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
 
+        database = FirebaseDatabase.getInstance();
+        userLocationsRef = database.getReference("User1/Location");
+
+        userLocationsRef.addChildEventListener(markerUpdateListener);
+
+
+        // later when the activity becomes inactive.
+        // userLocationsRef.removeEventListener(markerUpdateListener)
     }
 
-//            databaseLocation.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    for (DataSnapshot child : dataSnapshot.child("UserID").getChildren()) {
-//                        Coordinates UserID = dataSnapshot.getValue(Coordinates.class);
-//                        String latitude = child.child("latitude").getValue().toString();
-//                        String longitude = child.child("longitude").getValue().toString();
-//                        double loclatitude = Double.parseDouble(latitude);
-//                        double loclongitude = Double.parseDouble(longitude);
-//                        LatLng cod = new LatLng(loclatitude, loclongitude);
-//                        googleMap1.addMarker(new MarkerOptions().position(cod).title(""));
-//                        marker1=gMap.addMarker(new MarkerOptions().position(new LatLng
-//                                (dataSnapshot.child("latitude").getValue(double.class),
-//                                        dataSnapshot.child("longitude").getValue(double.class)))
-//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-//                                .title("Bus 1")); marker1.showInfoWindow();
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//
-//
-//            });
-
-
-
+    /**
+     * Retrieves the marker data for the given key.
+     *
+     * @param key The ID of the marker
+     * @return A MarkerOptions instance containing this marker's infoormation
+     */
+    private MarkerOptions getMarkerOptions(String key) {
+        // TODO: Read data from database for the given marker (e.g. Name, Driver, Vehicle type)
+        return new MarkerOptions().title("Location placeholder").snippet("Update this with marker information");
     }
-
-//        databaseLocation.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot child : dataSnapshot.child("UserID").getChildren()) {
-//                    UserID UserID = dataSnapshot.getValue(UserID.class);
-//                    String latitude = child.child("latitude").getValue().toString();
-//                    String longitude = child.child("longitude").getValue().toString();
-//                    double loclatitude = Double.parseDouble(latitude);
-//                    double loclongitude = Double.parseDouble(longitude);
-//                    LatLng cod = new LatLng(loclatitude, loclongitude);
-//                    googleMap.addMarker(new MarkerOptions().position(cod).title(""));
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-
-
-
-
-
-
-
+}

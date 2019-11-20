@@ -2,40 +2,23 @@ package com.example.draft;
 
 public class Coordinates {
 
-    public String latitude;
-    public String longitude;
-    public String name;
+    private double Latitude;
+    private double Longitude;
 
 
-    public Coordinates(){
+    public void setLatitude(Double latitude) {
+        Latitude=latitude;  }
+    public double getLatitude(Double latitude) {
+        Latitude=latitude;
+        return Latitude;
+    }
+    public double getLongitude(Double longitude) {
+        Longitude = longitude;
+        return Longitude;
+        }
+    public void setLongitude(Double longitude) {
+         Longitude = longitude;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;    }
-    public void getLatitude(String latitude) {
-        this.latitude = latitude;    }
-    public void getLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
 
-
-    public Object getLatitude() {
-        this.latitude = latitude;
-        return latitude;
-}
-
-    public Object getLongitude() {
-        this.longitude = longitude;
-        return longitude;
-    }
-
-    public void longitude(Object longitude) {
-        
-    }
-
-    public void latitude(Object latitude) {
-    }
 }
