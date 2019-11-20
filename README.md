@@ -46,10 +46,15 @@ Once Downloaded, the basic testing with emulators and android types are enabled.
 
 Project Implementation:
 5. Once the setup is done, download the project from the github and open from android studio. Remember to select the project file "App" in the folder downloaded. Once it is on your android studio, it will ask to configure the gradle if not detected. Most of the files I have implemented should have the most updated gradle so once it is done, the project should be buildable. 
+
 6. One last step, in the tools bar up top, go to firebase. This will take you to the firebase assistant. Go to Authentication and connect, as well as RealTime Database and connect to database. Notes that there will be a chance it will not work because it requires my permission and google account access so if this is the case, go to the firebase section below and make your own config using my instructions. If you need to do this step, please go to firebase section first before continuing. 
+
 7. Assuming that the project is able to be running with database or you just came back from setting it up, Run the application with the play button and select either an emulator or an android device connected. The project implements a database already but after two-three weeks after 11/20/2019, the github will either disable these services to prevent charges. 
+
 8. The first page will be a login page, register an account and then login to be brought to the main page. Then in the top right, there should be an Scan button. The scan button will show list of devices. If you are following the guide with the other necessary components (heart rate and GPS), then the User interface should work. Click on the Service you require and the graph layout and the extra services (takes a few seconds) should show.
+
 9. Clicking the service and then the next characterstics, the heart rate service should begin and the graph should start moving. 
+
 10. In case for GPS, go to the top right options again and click on the MainPage2. Once there, click on the GPS button and the Map should automatically direct you to the location you are in. Note this is real time update and is made to always go back to the user. There the application is done!.
 
 Create a new project with a basic activity that would act as your main page. Once in, create a new activity, or individual an resource/java class. Make another project with the sample example called BLUETOOTHLEGATT. This is the premise for our bluetooth connection that requires some modification to work. 
