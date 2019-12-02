@@ -139,6 +139,7 @@ Go make a google cloud platform account. Once created go to console on the top r
 
 -------------------------------------------------------------------------------------------------------------------------------
 Downloading the Android project should allow this to run.
+NOTE: IF the project downloads, but does not get past the login screen. If it says that the android application is blocked, this is because the project has its own SHA-1 certification and you. If you have downloaded this project and expect it to work, you must go on firebase and add in the SHA-1 certification to firebase project settings for the project to work. If you are the senior project advice, you must private message me your SHA-1 certification from android studio for it to fully function. 
 After implementing the Android project, and completing the other hardware components.
 The end results should give you something like this:
 
